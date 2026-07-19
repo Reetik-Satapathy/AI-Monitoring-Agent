@@ -3,6 +3,7 @@ from pydantic import ValidationError
 
 from aikubagent.models.webhook import AlertmanagerWebhook
 from aikubagent.services.parser import AlertParser
+from aikubagent.services.analyzer import IncidentAnalyzer
 
 app = Flask(__name__)
 
@@ -37,10 +38,15 @@ def webhook():
         # Print the validated Pydantic model
         incidents = AlertParser.parse(webhook_data )
 
+        incidents = AlertParser.parse(webhook_data)
+
         print(f"Parsed {len(incidents)} incident(s)\n", flush=True)
-        
+
         for incident in incidents:
-            print(incident.model_dump_json(indent=4), flush=True)
+            analysis = IncidentAnalyzer.analyze(incident)
+
+            print(analysis, flush=True)
+            print("-" * 50, flush=True)
 
         print("\n====================================\n", flush=True)
 
@@ -48,16 +54,15 @@ def webhook():
             "status": "received"
         }), 200
 
-    except ValidationError as e:
-        print("\n===== VALIDATION ERROR =====", flush=True)
+    except Exception as e:
+        print("\n===== CREW ERROR =====", flush=True)
         print(e, flush=True)
-        print("============================\n", flush=True)
+        print("======================\n", flush=True)
 
         return jsonify({
             "status": "error",
-            "message": "Invalid Alertmanager payload",
-            "errors": e.errors()
-        }), 400
+            "message": str(e)
+        }), 500
 
 
 @app.route("/health", methods=["GET"])
