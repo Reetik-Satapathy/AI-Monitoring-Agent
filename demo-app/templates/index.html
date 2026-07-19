@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Kubernetes Monitoring Platform</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+
+<body>
+
+    <header class="hero">
+
+        <div class="container">
+
+            <h1>AI Kubernetes Monitoring Platform</h1>
+
+            <p class="subtitle">
+                Cloud-native observability powered by Kubernetes,
+                Prometheus, Grafana, and AI Agents.
+            </p>
+
+            <div class="buttons">
+                <a href="#" class="btn primary">GitHub</a>
+                <a href="#" class="btn secondary">Architecture</a>
+            </div>
+
+        </div>
+
+    </header>
+
+    <main class="container">
+
+        <section class="info">
+
+            <h2>Demo Workload</h2>
+
+            <p>
+                This Flask application represents a production workload deployed on Kubernetes.
+                Every form submission is stored in MySQL and contributes to application traffic
+                monitored by Prometheus and analyzed by an AI-powered incident response agent.
+            </p>
+
+        </section>
+
+        <section class="card">
+
+            <h2>Generate Traffic</h2>
+
+            <p class="card-subtitle">
+                Submit a request to simulate application activity.
+            </p>
+
+            {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    <div class="success">
+                        {{ messages[0] }}
+                    </div>
+                {% endif %}
+            {% endwith %}
+
+            <form action="/contact" method="POST">
+
+                <input
+                    type="text"
+                    name="name"
+                    placeholder="Your Name"
+                    required
+                >
+
+                <input
+                    type="email"
+                    name="email"
+                    placeholder="Email Address"
+                    required
+                >
+
+                <textarea
+                    name="message"
+                    placeholder="Message"
+                    rows="5"
+                    required
+                ></textarea>
+
+                <button type="submit">
+                    Submit
+                </button>
+
+            </form>
+
+        </section>
+
+        <section class="tech-stack">
+
+            <h2>Technology Stack</h2>
+
+            <div class="badges">
+
+                <span>🐍 Flask</span>
+                <span>🗄 MySQL</span>
+                <span>🐳 Docker</span>
+                <span>☸ Kubernetes</span>
+                <span>📊 Prometheus</span>
+                <span>📈 Grafana</span>
+                <span>🤖 AI Agent</span>
+
+            </div>
+
+        </section>
+
+    </main>
+
+    <footer>
+
+        Built as part of an AI-powered Kubernetes Monitoring &
+        Incident Response Platform.
+
+    </footer>
+
+</body>
+
+</html>

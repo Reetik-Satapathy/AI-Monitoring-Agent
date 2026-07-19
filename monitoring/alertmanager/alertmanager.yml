@@ -1,0 +1,12 @@
+global:
+  resolve_timeout: 5m
+
+route:
+  receiver: ai-agent
+
+receivers:
+  - name: ai-agent
+
+    webhook_configs:
+      - url: "http://ai-agent:8000/webhook"
+        send_resolved: true

@@ -1,0 +1,43 @@
+groups:
+  - name: demo_app_alerts
+
+    rules:
+
+      - alert: AppDown
+        expr: up{job="demo-app"} == 0
+        for: 30s
+        labels:
+          severity: critical
+        annotations:
+          summary: "Demo application is down"
+          description: "Prometheus cannot scrape the Flask application."
+
+      - alert: HighRequestLatency
+        expr: histogram_quantile(
+                0.95,
+                sum(rate(http_request_duration_seconds_bucket[5m])) by (le)
+              ) > 1
+        for: 1m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High request latency"
+          description: "95th percentile request latency exceeded 1 second."
+
+      - alert: DatabaseInsertFailures
+        expr: increase(database_insert_failures_total[5m]) > 0
+        for: 30s
+        labels:
+          severity: warning
+        annotations:
+          summary: "Database insert failures detected"
+          description: "Database insert operations are failing."
+
+      - alert: TooManyInvalidForms
+        expr: increase(invalid_contact_submissions_total[5m]) > 5
+        for: 30s
+        labels:
+          severity: warning
+        annotations:
+          summary: "Too many invalid form submissions"
+          description: "More than five invalid contact forms were submitted within five minutes."
