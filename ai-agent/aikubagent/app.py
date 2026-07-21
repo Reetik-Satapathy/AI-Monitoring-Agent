@@ -4,6 +4,7 @@ from pydantic import ValidationError
 from aikubagent.models.webhook import AlertmanagerWebhook
 from aikubagent.services.parser import AlertParser
 from aikubagent.services.analyzer import IncidentAnalyzer
+from aikubagent.services.context_builder import ContextBuilder
 
 app = Flask(__name__)
 
@@ -33,22 +34,31 @@ def webhook():
         }), 400
 
     try:
-        webhook_data  = AlertmanagerWebhook.model_validate(payload)
-
-        # Print the validated Pydantic model
-        incidents = AlertParser.parse(webhook_data )
+        webhook_data = AlertmanagerWebhook.model_validate(payload)
 
         incidents = AlertParser.parse(webhook_data)
 
         print(f"Parsed {len(incidents)} incident(s)\n", flush=True)
 
         for incident in incidents:
-            analysis = IncidentAnalyzer.analyze(incident)
 
-            print(analysis, flush=True)
-            print("-" * 50, flush=True)
+            enriched_incident = ContextBuilder.build(incident)
+            analysis = IncidentAnalyzer.analyze(enriched_incident)
 
-        print("\n====================================\n", flush=True)
+            print("\n========== AI ANALYSIS ==========\n", flush=True)
+
+            print(f"Summary   : {analysis.summary}", flush=True)
+            print(f"Severity  : {analysis.severity}", flush=True)
+            print(f"Impact    : {analysis.impact}\n", flush=True)
+
+            print("Possible Causes:", flush=True)
+            for cause in analysis.possible_causes:
+                print(f"  • {cause}", flush=True)
+
+            print("\nFirst Troubleshooting Step:", flush=True)
+            print(f"  {analysis.first_troubleshooting_step}", flush=True)
+
+            print("\n================================\n", flush=True)
 
         return jsonify({
             "status": "received"

@@ -12,6 +12,16 @@ analyze_incident:
 
     Description: {description}
 
+    Request Rate: {request_rate} req/sec
+
+    Average Request Duration: {avg_request_duration} sec
+
+    Active Requests: {active_requests}
+
+    Homepage Visits: {homepage_visits}
+
+    Contact Form Submissions: {contact_submissions}
+
   expected_output: >
     A concise incident report containing:
 
@@ -20,3 +30,4 @@ analyze_incident:
     - Possible impact
     - Likely causes
     - First troubleshooting step
+

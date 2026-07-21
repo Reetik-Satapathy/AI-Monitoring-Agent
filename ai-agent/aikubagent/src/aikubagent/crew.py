@@ -2,6 +2,7 @@ from crewai import Agent, Crew, Process, Task
 from crewai.project import CrewBase, agent, crew, task
 from crewai.agents.agent_builder.base_agent import BaseAgent
 from aikubagent.config.llm import llm
+from aikubagent.models.analysis import IncidentAnalysis
 
 
 @CrewBase
@@ -19,14 +20,15 @@ class Aikubagent():
         return Agent(
             config=self.agents_config["incident_analyst"],
             llm=llm,
-            verbose=True,
+            verbose=False,
         )
 
     @task
     def analyze_incident(self) -> Task:
         return Task(
             config=self.tasks_config["analyze_incident"],
-            agent=self.incident_analyst(),   # <-- Add this
+            agent=self.incident_analyst(),
+            output_pydantic=IncidentAnalysis,
         )
 
     @crew
@@ -36,5 +38,5 @@ class Aikubagent():
             agents=self.agents,
             tasks=self.tasks,
             process=Process.sequential,
-            verbose=True,
+            verbose=False,
         )
