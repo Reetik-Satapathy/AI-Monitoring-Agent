@@ -1,0 +1,56 @@
+apiVersion: apps/v1
+kind: StatefulSet
+
+metadata:
+  name: {{ include "mysql.fullname" . }}
+
+spec:
+  serviceName: {{ include "mysql.fullname" . }}
+  replicas: 1
+
+  selector:
+    matchLabels:
+      app: {{ include "mysql.name" . }}
+
+  template:
+    metadata:
+      labels:
+        app: {{ include "mysql.name" . }}
+
+    spec:
+      containers:
+        - name: mysql
+
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+
+          ports:
+            - containerPort: 3306
+
+          envFrom:
+            - secretRef:
+                name: {{ include "mysql.fullname" . }}-secret
+
+          volumeMounts:
+            - name: mysql-storage
+              mountPath: /var/lib/mysql
+
+            - name: initdb
+              mountPath: /docker-entrypoint-initdb.d
+
+      volumes:
+        - name: initdb
+          configMap:
+            name: {{ include "mysql.fullname" . }}-initdb
+
+  volumeClaimTemplates:
+    - metadata:
+        name: mysql-storage
+
+      spec:
+        accessModes:
+          - ReadWriteOnce
+
+        resources:
+          requests:
+            storage: {{ .Values.persistence.size }}

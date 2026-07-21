@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+
+metadata:
+  name: ai-agent-config
+  namespace: ai-platform
+
+data:
+  PROMETHEUS_URL: "http://prometheus:9090"
+
+  LOG_LEVEL: "INFO"

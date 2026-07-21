@@ -1,0 +1,14 @@
+image:
+  repository: mysql
+  tag: "8.4"
+  pullPolicy: IfNotPresent
+
+auth:
+  rootPassword: root123
+  database: portfolio_db
+  username: appuser
+  password: root123
+
+persistence:
+  size: 5Gi
+
