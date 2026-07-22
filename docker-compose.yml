@@ -98,8 +98,8 @@ services:
   
   ai-agent:
     build:
-      context: ./ai-agent/aikubagent
-      dockerfile: ../Dockerfile
+      context: ./ai-agent
+      dockerfile: .
 
     container_name: ai-agent
 

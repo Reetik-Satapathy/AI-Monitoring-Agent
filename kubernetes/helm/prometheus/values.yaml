@@ -1,0 +1,29 @@
+server:
+  persistentVolume:
+    enabled: true
+    size: 5Gi
+
+  service:
+    type: ClusterIP
+
+alertmanager:
+  enabled: true
+
+pushgateway:
+  enabled: false
+
+kube-state-metrics:
+  enabled: false
+
+prometheus-node-exporter:
+  enabled: false
+
+extraScrapeConfigs: |
+  - job_name: "demo-app"
+
+    metrics_path: /metrics
+    scrape_interval: 15s
+
+    static_configs:
+      - targets:
+          - demo-app:5000
