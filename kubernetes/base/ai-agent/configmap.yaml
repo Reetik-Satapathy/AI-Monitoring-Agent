@@ -6,6 +6,6 @@ metadata:
   namespace: ai-platform
 
 data:
-  PROMETHEUS_URL: "http://prometheus:9090"
+  PROMETHEUS_URL: "http://prometheus-server:80"
 
   LOG_LEVEL: "INFO"

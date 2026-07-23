@@ -1,52 +1,15 @@
-server:
-  persistentVolume:
-    enabled: true
-    size: 5Gi
+apiVersion: v1
+kind: ConfigMap
 
-  service:
-    type: ClusterIP
+metadata:
+  name: prometheus-alert-rules
+  namespace: ai-platform
 
-alertmanager:
-  enabled: true
-
-  config:
-    global: {}
-
-    route:
-      receiver: ai-agent
-      group_wait: 10s
-      group_interval: 30s
-      repeat_interval: 1h
-
-    receivers:
-      - name: ai-agent
-        webhook_configs:
-          - url: "http://ai-agent:8000/webhook"
-            send_resolved: true
-
-pushgateway:
-  enabled: false
-
-kube-state-metrics:
-  enabled: false
-
-prometheus-node-exporter:
-  enabled: false
-
-extraScrapeConfigs: |
-  - job_name: "demo-app"
-
-    metrics_path: /metrics
-    scrape_interval: 15s
-
-    static_configs:
-      - targets:
-          - demo-app:5000
-
-serverFiles:
-  alerting_rules.yml:
+data:
+  alert.rules.yml: |
     groups:
       - name: demo-app-alerts
+
         rules:
 
           - alert: DemoAppDown
@@ -99,3 +62,4 @@ serverFiles:
             annotations:
               summary: "MySQL is Down"
               description: "Prometheus cannot reach the MySQL service."
+        
