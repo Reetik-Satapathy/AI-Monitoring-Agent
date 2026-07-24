@@ -8,7 +8,7 @@ RUN pip install --no-cache-dir uv
 
 COPY . .
 
-RUN uv sync --frozen
+RUN uv sync --no-dev
 
 ENV PATH="/app/.venv/bin:$PATH"
 
