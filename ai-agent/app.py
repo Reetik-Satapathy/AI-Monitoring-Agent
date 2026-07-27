@@ -43,6 +43,14 @@ def webhook():
         for incident in incidents:
 
             enriched_incident = ContextBuilder.build(incident)
+            enriched_incident = ContextBuilder.build(incident)
+
+            print("\n========== ENRICHED INCIDENT ==========\n", flush=True)
+
+            print(
+                enriched_incident.model_dump_json(indent=4),
+                flush=True
+            )
             analysis = IncidentAnalyzer.analyze(enriched_incident)
 
             print("\n========== AI ANALYSIS ==========\n", flush=True)
